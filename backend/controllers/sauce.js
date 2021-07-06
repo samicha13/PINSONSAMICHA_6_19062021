@@ -1,5 +1,5 @@
 //Import schema Sauce .
-const Sauce = require('../models/Sauce');
+const Sauce = require('../models/sauce');
 //Import package File System
 const fs = require('fs');
 
