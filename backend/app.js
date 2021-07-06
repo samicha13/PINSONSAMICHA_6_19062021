@@ -14,8 +14,8 @@ mongoose.connect(process.env.DB_MGN, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
   })
-	.then(() => console.log('Connexion à MangoDB réussis !'))
-	.catch((error) => console.log('Connexion à MangoDB échouée'));
+	.then(() => console.log('Connexion à MongoDB réussis !'))
+	.catch((error) => console.log('Connexion à MongoDB échouée'));
   
 
 // constante pour notre application 

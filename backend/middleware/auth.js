@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.TK_JWT);
+    const decodedToken = jwt.verify(token, process.env.TK_SESSION);// token afin d'avoir accés aux sauces
     const userId = decodedToken.userId;
     if (req.body.userId && req.body.userId !== userId) {
       throw 'Invalid user ID';

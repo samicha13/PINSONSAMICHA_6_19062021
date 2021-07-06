@@ -38,7 +38,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-          //email: maskData.maskEmail2(req.body.email, emailMask2Options), // With maskdata
+        
           email: req.body.email,
           password: hash
         });
@@ -48,14 +48,14 @@ exports.signup = (req, res, next) => {
       })
       .catch(error => res.status(500).json({ error }));
   } else {
-    //(schema.validate(req.body.password, { list: true }));
+   
     res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
   } 
 };
 
 // Conexion d'un utilsateur à son compté déjà existant
 exports.login = (req, res, next) => {
-  // User.findOne({email:maskData.maskEmail2(req.body.email, emailMaskOptions)}) // With maskdata
+  
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
