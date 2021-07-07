@@ -20,11 +20,11 @@ const emailMask2Options = {
 //  Schema de validation de l'émail
 schema.is().min(8)                                    // Minimum  8
 schema.is().max(100)                                  // Maximum 100
-schema.has().uppercase()                              // Maj obligatoire
+schema.has().uppercase(1)                              // Maj obligatoire
 schema.has().lowercase()                              // Min obligatoire
 schema.has().digits(2)                                // Min 2 chiffres
 schema.has().not().spaces()                           // Pas d'espaces
-schema.is().not().oneOf(['Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'azertyuiop', 'azerty']); // MDP non valide
+schema.is().not().oneOf(['Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'azertyuiop', 'azerty']); // MDP non valide car trop facile a trouver
 
 
 // création nouvel utilisateur
@@ -52,6 +52,7 @@ exports.signup = (req, res, next) => {
     res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
   } 
 };
+
 
 // Conexion d'un utilsateur à son compté déjà existant
 exports.login = (req, res, next) => {

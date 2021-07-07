@@ -45,7 +45,7 @@ exports.modifySauce = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 };
 
-//effacer une sauce.
+//effacer une sauce
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then(sauce => {
@@ -68,6 +68,55 @@ exports.getAllSauces = (req, res, next) => {
   ).catch(
     (error) => {
       res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
+
+// LIKES / DISLIKES 
+// userLiked,  userDisliked, userID définis grâce au modéle de données fournis dans la doc
+exports.likeDislikeSauces = (req, res, next) => {
+  const userAvis = new Sauce({ // constante choix avis de l'utilisateur s'il aime ou n'aime pas 
+    likes: req.body.like,
+    userId: req.body.userId
+  });
+  Sauce.findOne({
+    _id: req.params.id
+  }).then(
+    (sauce) => {
+      Sauce.updateOne({ _id: req.params.id }, sauce)
+      //Session like
+      if (userAvis.likes === 1 && !sauce.usersLiked.includes(userAvis.userId)) {
+        sauce.likes = sauce.likes + 1;
+        sauce.usersLiked.push(userAvis.userId);
+      }
+      //SUPPRIMER SON LIKE OU DISLIKE
+      else if (userAvis.likes === 0) {
+        //Supprimer le like déja mis
+        if (sauce.usersLiked.includes(userAvis.userId)) {
+          let userLikedSauce = sauce.usersLiked.indexOf(userAvis.userId);
+          sauce.likes = sauce.likes - 1;
+          sauce.usersLiked.splice(userLikedSauce, 1);
+        }
+        //Si l'utillsateur veut annuler son dislike
+        if (sauce.usersDisliked.includes(userAvis.userId)) {
+          let userDislikedSauce = sauce.usersDisliked.indexOf(userAvis.userId);
+          sauce.dislikes = sauce.dislikes - 1;
+          sauce.usersDisliked.splice(userDislikedSauce, 1);
+        }
+      }
+      //Session dislikes
+      else if (userAvis.likes === -1 && !sauce.usersDisliked.includes(userAvis.userId)) {
+        sauce.dislikes = sauce.dislikes + 1;
+        sauce.usersDisliked.push(userAvis.userId);
+      }
+      sauce.save(sauce)
+      res.status(200).json(sauce);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
         error: error
       });
     }
