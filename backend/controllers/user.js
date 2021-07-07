@@ -35,10 +35,13 @@ exports.signup = (req, res, next) => {
   };
 
   if (schema.validate(req.body.password)) {
-    bcrypt.hash(req.body.password, 10)
+    res.writeHead(400, 'Le mot de passe doit avoir au minimum 8 caractères, 1 majuscule, 2 chiffres et ne doit  comporter aucun espace' );
+   res.end('Format de mot de passe incorrect');
+    
+  } else {
+   bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-        
           email: req.body.email,
           password: hash
         });
@@ -47,8 +50,6 @@ exports.signup = (req, res, next) => {
           .catch(error => res.status(400).json({ error }));
       })
       .catch(error => res.status(500).json({ error }));
-  } else {
-   
     res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
   } 
 };
