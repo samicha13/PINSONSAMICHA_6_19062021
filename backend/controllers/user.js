@@ -8,13 +8,6 @@ const mailValidator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
 
-//Masquage du mail
-const emailMask2Options = {
-  maskWith: "*",
-  unmaskedStartCharactersBeforeAt: 3,
-  unmaskedEndCharactersAfterAt: 2,
-  maskAtTheRate: false
-};
 
 
 //  Schema de validation de l'émail
