@@ -9,7 +9,6 @@ const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
 
 
-
 //  Schema de validation de l'émail
 schema.is().min(8)                                    // Minimum  8
 schema.is().max(100)                                  // Maximum 100
