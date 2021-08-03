@@ -6,7 +6,8 @@ require('dotenv').config();
 const mailValidator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
-
+//Import Maskdata package: pour masquer l'email.
+const MaskData = require('maskdata');
 
 //  Schema de validation de l'émail
 schema.is().min(8)                                    // Minimum  8
@@ -18,6 +19,13 @@ schema.has().not().spaces()                           // Pas d'espaces
 schema.is().not().oneOf(['Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'azertyuiop', 'azerty']); // MDP non valide car trop facile a trouver
 
 
+ //Fonction pour hash l'e-mail.
+ const emailMask2Options = {
+  maskWith: "*",
+  unmaskedStartCharactersBeforeAt: 3, // masquage après 3 caratéres 
+  unmaskedEndCharactersAfterAt: 2,// fini le masquage 2 caractére avant
+  maskAtTheRate: false
+};
 // création nouvel utilisateur
 exports.signup = (req, res, next) => {
   if (!mailValidator.validate(req.body.email)) {
@@ -26,10 +34,12 @@ exports.signup = (req, res, next) => {
   };
 
   if (schema.validate(req.body.password)) {
+    //Mask mail adress.
+   const maskedEmail = MaskData.maskEmail2(req.body.email, emailMask2Options);
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-        
+          emailmasked: maskedEmail,
           email: req.body.email,
           password: hash
         });
@@ -43,6 +53,7 @@ exports.signup = (req, res, next) => {
     res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
   } 
 };
+
 
 // Conexion d'un utilsateur à son compté déjà existant
 exports.login = (req, res, next) => {

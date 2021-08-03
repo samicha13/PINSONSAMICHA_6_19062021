@@ -8,6 +8,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const userSchema = mongoose.Schema({
   email: { type: String, required:[true, 'Veuillez rentrer votre email'] , unique: true, lowercase: true, maxlength:[320, 'L émail ne peut depasser 320 caratéres']},
   password: { type: String, required: true },
+  emailmasked: { type: String, required: true },
 });
 
 // Utilisation du module  uniqueValidator sur le schéma de l'utilisateur
